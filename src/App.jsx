@@ -2,25 +2,36 @@ import { useState, useEffect } from "react";
 import questions from "./Question/Questions.json";
 import Timer from "./Components/Timer";
 import Result from "./Components/Result";
-import Signup from "./Components/Signup";
+import Signup from "./Components/Signup"; // Import Signup Component
 
 function App() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [quizOver, setQuizOver] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
-  const [user, setUser] = useState(null);
-  const [startTime, setStartTime] = useState(null);
-  const [totalTime, setTotalTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0); // Track total quiz time
+  const [selectedOption, setSelectedOption] = useState(null);
 
+
+  // Shuffle questions on component mount
   useEffect(() => {
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
-    setStartTime(Date.now());
   }, []);
 
+  // Track total quiz time
+  useEffect(() => {
+    if (timeLeft === 0) {
+      handleNextQuestion();
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
   const handleAnswer = (selectedAnswer) => {
     setSelectedOption(selectedAnswer);
     if (selectedAnswer === shuffledQuestions[currentQuestion].correctAnswer) {
@@ -31,13 +42,25 @@ function App() {
       setSelectedOption(null);
     }, 1000);
   };
+  
+
+  useEffect(() => {
+    if (quizOver) return; // Stop tracking when the quiz is over
+  
+    const totalTimeTimer = setInterval(() => {
+      setTotalTime((prev) => prev + 1);
+    }, 1000);
+  
+    return () => clearInterval(totalTimeTimer);
+  }, [quizOver]); // Runs only when quiz is active
+  
+  
 
   const handleNextQuestion = () => {
     if (currentQuestion < shuffledQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setTimeLeft(30);
     } else {
-      setTotalTime(Math.floor((Date.now() - startTime) / 1000));
       setQuizOver(true);
     }
   };
@@ -47,35 +70,18 @@ function App() {
     setScore(0);
     setTimeLeft(30);
     setQuizOver(false);
-    setUser(null); // Reset user to go back to signup
+    setTotalTime(0); // Reset total time
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   };
 
-  useEffect(() => {
-    if (timeLeft === 0) {
-      handleNextQuestion();
-    }
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft]);
-
-  if (!user) {
-    return <Signup onSignup={(name, email) => setUser({ name, email })} />;
+  // Show signup screen if user has not entered name & email
+  if (!name || !email) {
+    return <Signup setName={setName} setEmail={setEmail} />;
   }
 
   if (quizOver) {
-    return <Result score={score} totalQuestions={shuffledQuestions.length} totalTime={totalTime} restartQuiz={restartQuiz} />;
-  }
-
-  if (!shuffledQuestions.length || !shuffledQuestions[currentQuestion]) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 animate-pulse">
-        <p className="text-xl text-slate-700 text-shadow-md">Loading questions...</p>
-      </div>
-    );
+    return <Result name={name} email={email} score={score} totalQuestions={shuffledQuestions.length} totalTime={totalTime} restartQuiz={restartQuiz} />;
   }
 
   return (
