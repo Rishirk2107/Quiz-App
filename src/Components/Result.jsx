@@ -35,12 +35,12 @@ function Result({ name, email, score, totalQuestions, totalTime, restartQuiz }) 
         <p className="text-xl mb-2">Email: {email}</p>
         <p className="text-xl mb-2">Time Taken: {totalTime} sec</p>
         <p className="text-xl mb-6">Score: {score} / {totalQuestions}</p>
-        <Button
+        {/* <Button
           onClick={restartQuiz}
           className="bg-slate-500 text-white px-6 py-2 rounded-lg hover:bg-slate-600 cursor-pointer"
         >
           Retry Quiz
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

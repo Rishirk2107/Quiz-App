@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import questions from "./Question/Questions.json";
-import Timer from "./Components/Timer";
 import Result from "./Components/Result";
 import Signup from "./Components/Signup"; // Import Signup Component
 
@@ -9,37 +8,40 @@ function App() {
   const [email, setEmail] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
   const [quizOver, setQuizOver] = useState(false);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
-  const [totalTime, setTotalTime] = useState(0);
+  const [totalTimeLeft, setTotalTimeLeft] = useState(15 * 60); // 15 mins in seconds
   const [selectedOption, setSelectedOption] = useState(null);
 
-  // Shuffle questions on component mount
+  // Shuffle and select random 8 questions on component mount
   useEffect(() => {
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
-    setShuffledQuestions(shuffled);
+    const selectedQuestions = shuffled.slice(0, 8); // Select first 8 questions
+    setShuffledQuestions(selectedQuestions);
   }, []);
 
-  // Track quiz time
+  // Track total quiz time
   useEffect(() => {
     if (quizOver) return;
-    const totalTimeTimer = setInterval(() => {
-      setTotalTime((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(totalTimeTimer);
-  }, [quizOver]);
-
-  // Question timer
-  useEffect(() => {
-    if (timeLeft === 0) {
-      handleNextQuestion();
-    }
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
+      setTotalTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setQuizOver(true); // End the quiz when time runs out
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [quizOver]);
+
+  // Save the email in localStorage once the quiz is finished
+  useEffect(() => {
+    if (quizOver && email) {
+      localStorage.setItem('completedQuizEmail', email);
+    }
+  }, [quizOver, email]);
 
   const handleAnswer = (selectedAnswer) => {
     setSelectedOption(selectedAnswer);
@@ -55,21 +57,32 @@ function App() {
   const handleNextQuestion = () => {
     if (currentQuestion < shuffledQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
-      setTimeLeft(30);
     } else {
-      setQuizOver(true);
+      setQuizOver(true); // End the quiz if all questions are answered
     }
   };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
     setScore(0);
-    setTimeLeft(30);
     setQuizOver(false);
-    setTotalTime(0);
+    setTotalTimeLeft(15 * 60); // Reset to 15 minutes
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   };
+
+  // Convert total time left to mm:ss format
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+  };
+
+  // If email is already stored in localStorage, show the message about already completing the quiz
+  const storedEmail = localStorage.getItem('completedQuizEmail');
+  if (storedEmail === email) {
+    return <p className="text-xl font-semibold mb-6">You have already completed the quiz.</p>;
+  }
 
   // Show signup screen if user has not entered name & email
   if (!name || !email) {
@@ -83,7 +96,7 @@ function App() {
         email={email}
         score={score}
         totalQuestions={shuffledQuestions.length}
-        totalTime={totalTime}
+        totalTime={15 * 60 - totalTimeLeft} // Time taken
         restartQuiz={restartQuiz}
       />
     );
@@ -97,7 +110,7 @@ function App() {
           <p className="text-lg">
             Question {currentQuestion + 1} / {shuffledQuestions.length}
           </p>
-          <Timer timeLeft={timeLeft} />
+          <p className="text-lg font-bold text-red-500">Time Left: {formatTime(totalTimeLeft)}</p>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
           <div
@@ -107,7 +120,7 @@ function App() {
             }}
           ></div>
         </div>
-        
+
         {/* Display Question */}
         <p className="text-xl font-semibold mb-6">{shuffledQuestions[currentQuestion].question}</p>
 

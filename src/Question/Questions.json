@@ -1,107 +1,137 @@
 [
-    {
-      "question": "What is the capital of France?",
-      "options": ["Paris", "London", "Berlin", "Madrid"],
-      "correctAnswer": "Paris"
-    },
-    {
-      "question": "Which planet is known as the Red Planet?",
-      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
-      "correctAnswer": "Mars"
-    },
-    {
-      "question": "Fill in the blanks to swap two numbers without using a third variable and without using arithmetic operators.",
-      "code":["function swapNumbers(a, b):",
-    "   a = a __ b",
-    "   b = a __ b",
-    "   a = a __ b",
-    "   return a, b"],
-      "options": ["Harper Lee", "Mark Twain", "J.K. Rowling", "Ernest Hemingway"],
-      "correctAnswer": "Harper Lee"
-    },
-    {
-      "question": "What is the largest ocean on Earth?",
-      "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-      "correctAnswer": "Pacific Ocean"
-    },
-    {
-      "question": "Who painted the Mona Lisa?",
-      "options": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
-      "correctAnswer": "Leonardo da Vinci"
-    },
-    {
-      "question": "What is the smallest country in the world?",
-      "options": ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
-      "correctAnswer": "Vatican City"
-    },
-    {
-      "question": "What is the chemical symbol for gold?",
-      "options": ["Au", "Ag", "Pb", "Fe"],
-      "correctAnswer": "Au"
-    },
-    {
-      "question": "Who developed the theory of relativity?",
-      "options": ["Isaac Newton", "Galileo Galilei", "Nikola Tesla", "Albert Einstein"],
-      "correctAnswer": "Albert Einstein"
-    },
-    {
-      "question": "What is the longest river in the world?",
-      "options": ["Amazon River", "Nile River", "Yangtze River", "Mississippi River"],
-      "correctAnswer": "Nile River"
-    },
-    {
-      "question": "Which element has the atomic number 1?",
-      "options": ["Oxygen", "Hydrogen", "Carbon", "Helium"],
-      "correctAnswer": "Hydrogen"
-    },
-    {
-      "question": "Who was the first person to walk on the moon?",
-      "options": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "Michael Collins"],
-      "correctAnswer": "Neil Armstrong"
-    },
-    {
-      "question": "What is the capital of Japan?",
-      "options": ["Seoul", "Beijing", "Bangkok", "Tokyo"],
-      "correctAnswer": "Tokyo"
-    },
-    {
-      "question": "Which country is known as the Land of the Rising Sun?",
-      "options": ["China", "Japan", "South Korea", "Thailand"],
-      "correctAnswer": "Japan"
-    },
-    {
-      "question": "What is the hardest natural substance on Earth?",
-      "options": ["Gold", "Iron", "Diamond", "Platinum"],
-      "correctAnswer": "Diamond"
-    },
-    {
-      "question": "Who wrote the play 'Romeo and Juliet'?",
-      "options": ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"],
-      "correctAnswer": "William Shakespeare"
-    },
-    {
-      "question": "What is the largest planet in our solar system?",
-      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
-      "correctAnswer": "Jupiter"
-    },
-    {
-      "question": "What is the main ingredient in guacamole?",
-      "options": ["Tomato", "Onion", "Avocado", "Pepper"],
-      "correctAnswer": "Avocado"
-    },
-    {
-      "question": "Which country gifted the Statue of Liberty to the United States?",
-      "options": ["Germany", "France", "Italy", "Spain"],
-      "correctAnswer": "France"
-    },
-    {
-      "question": "What is the national flower of Pakistan?",
-      "options": ["Rose", "Tulip", "Jasmine", "Sunflower"],
-      "correctAnswer": "Jasmine"
-    },
-    {
-      "question": "Who painted the ceiling of the Sistine Chapel?",
-      "options": ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"],
-      "correctAnswer": "Michelangelo"
-    }
-  ]
+  {
+    "question": "Fill in the blanks to swap two numbers without using a third variable and without using arithmetic operators.",
+    "code": [
+      "function swapNumbers(a, b):",
+      "    a = a __ b",
+      "    b = a __ b",
+      "    a = a __ b",
+      "    return a, b"
+    ],
+    "options": ["AND", "OR", "XOR", "NOT"],
+    "correctAnswer": "XOR"
+  },
+  {
+    "question": "Fill in the blanks to check if a number is a power of two using bitwise operations.",
+    "code": [
+      "function isPowerOfTwo(n):",
+      "    return n > 0 and (n __ (n - 1)) == 0"
+    ],
+    "options": ["AND", "OR", "XOR", "NOT"],
+    "correctAnswer": "AND"
+  },
+  {
+    "question": "Fill in the blanks to generate the Fibonacci sequence using recursion.",
+    "code": [
+      "function fibonacci(n):",
+      "    if n <= 1:",
+      "        return __",
+      "    return fibonacci(n - 1) __ fibonacci(n - 2)"
+    ],
+    "options": ["n, +", "n, -", "1, *", "n, *"],
+    "correctAnswer": "n, +"
+  },
+  {
+    "question": "Rotate an array to the right by k steps.",
+    "code": [
+      "function rotateArray(arr, k):",
+      "    k = k MOD length(arr)",
+      "    reverse(arr, 0, length(arr) - 1)",
+      "    reverse(arr, 0, __)",
+      "    reverse(arr, __, length(arr) - 1)"
+    ],
+    "options": ["k-1, k", "k, k-1", "k+1, k", "k, k+1"],
+    "correctAnswer": "k-1, k"
+  },
+  {
+    "question": "Write a function to calculate the factorial of a number using recursion.",
+    "code": [
+      "function factorial(n):",
+      "    if n == __:",
+      "        return 1",
+      "    return n __ factorial(n - 1)"
+    ],
+    "options": ["0, +", "1, *", "0, *", "n, *"],
+    "correctAnswer": "0, *"
+  },
+  {
+    "question": "Calculate the sum of all natural numbers up to n.",
+    "code": [
+      "function sumOfNumbers(n):",
+      "    sum = 0",
+      "    for i from 1 to __:",
+      "        sum = sum __ i",
+      "    return sum"
+    ],
+    "options": ["n, +", "n, -", "1, *", "n-1, +"],
+    "correctAnswer": "n, +"
+  },
+  {
+    "question": "Check if a given string s is a palindrome.",
+    "code": [
+      "function isPalindrome(s):",
+      "    left = 0",
+      "    right = length(s) - 1",
+      "    while left < right:",
+      "        if s[left] != s[right]:",
+      "            return false",
+      "        left = left __ 1",
+      "        right = right __ 1",
+      "    return true"
+    ],
+    "options": ["+, -", "-, -", "*, /", "+, +"],
+    "correctAnswer": "+, -"
+  },
+  {
+    "question": "Reverse a string s.",
+    "code": [
+      "function reverseString(s):",
+      "    reversedString = \"\"",
+      "    for i from length(s) - 1 to __:",
+      "        reversedString = reversedString __ s[i]",
+      "    return reversedString"
+    ],
+    "options": ["0, +", "1, -", "1, +", "0, -"],
+    "correctAnswer": "0, +"
+  },
+  {
+    "question": "Which of the following data structures is used in Breadth-First Search (BFS)?",
+    "options": ["Stack", "Queue", "Priority Queue", "Linked List"],
+    "correctAnswer": "Queue"
+  },
+  {
+    "question": "Which of the following is a stable sorting algorithm?",
+    "options": ["Selection Sort", "Bubble Sort", "Quick Sort", "Heap Sort"],
+    "correctAnswer": "Bubble Sort"
+  },
+  {
+    "question": "In which case will Bubble Sort have the best time complexity?",
+    "options": ["When the array is sorted", "When the array is reverse sorted", "When all elements are the same", "When the array has distinct elements"],
+    "correctAnswer": "When the array is sorted"
+  },
+  {
+    "question": "In Linear Search, if the element is found at the first position, how many comparisons are made?",
+    "options": ["n", "1", "n - 1", "n / 2"],
+    "correctAnswer": "1"
+  },
+  {
+    "question": "What is the time complexity of accessing the middle element of an array?",
+    "options": ["O(n)", "O(n log n)", "O(1)", "O(log n)"],
+    "correctAnswer": "O(1)"
+  },
+  {
+    "question": "What happens if you try to remove an element from an empty stack?",
+    "options": ["It throws an error", "It returns the first element", "It returns null", "It performs no action"],
+    "correctAnswer": "It throws an error"
+  },
+  {
+    "question": "How many levels are in a balanced binary tree with 7 nodes?",
+    "options": ["2", "3", "4", "5"],
+    "correctAnswer": "3"
+  },
+  {
+    "question": "What is the height of a binary tree with only one node?",
+    "options": ["0", "1", "2", "Undefined"],
+    "correctAnswer": "0"
+  }
+]
