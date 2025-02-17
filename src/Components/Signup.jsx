@@ -17,7 +17,7 @@ function Signup({ setName, setEmail }) {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
+        <h1 className="text-2xl font-bold mb-4">Welcome to Algo-Rhythms Round 1</h1>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <input
             type="text"
