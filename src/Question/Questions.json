@@ -10,7 +10,12 @@
       "correctAnswer": "Mars"
     },
     {
-      "question": "Who wrote 'To Kill a Mockingbird'?",
+      "question": "Fill in the blanks to swap two numbers without using a third variable and without using arithmetic operators.",
+      "code":["function swapNumbers(a, b):",
+    "   a = a __ b",
+    "   b = a __ b",
+    "   a = a __ b",
+    "   return a, b"],
       "options": ["Harper Lee", "Mark Twain", "J.K. Rowling", "Ernest Hemingway"],
       "correctAnswer": "Harper Lee"
     },

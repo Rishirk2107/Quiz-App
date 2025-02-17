@@ -12,9 +12,8 @@ function App() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [quizOver, setQuizOver] = useState(false);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
-  const [totalTime, setTotalTime] = useState(0); // Track total quiz time
+  const [totalTime, setTotalTime] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-
 
   // Shuffle questions on component mount
   useEffect(() => {
@@ -22,7 +21,16 @@ function App() {
     setShuffledQuestions(shuffled);
   }, []);
 
-  // Track total quiz time
+  // Track quiz time
+  useEffect(() => {
+    if (quizOver) return;
+    const totalTimeTimer = setInterval(() => {
+      setTotalTime((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(totalTimeTimer);
+  }, [quizOver]);
+
+  // Question timer
   useEffect(() => {
     if (timeLeft === 0) {
       handleNextQuestion();
@@ -32,6 +40,7 @@ function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, [timeLeft]);
+
   const handleAnswer = (selectedAnswer) => {
     setSelectedOption(selectedAnswer);
     if (selectedAnswer === shuffledQuestions[currentQuestion].correctAnswer) {
@@ -42,19 +51,6 @@ function App() {
       setSelectedOption(null);
     }, 1000);
   };
-  
-
-  useEffect(() => {
-    if (quizOver) return; // Stop tracking when the quiz is over
-  
-    const totalTimeTimer = setInterval(() => {
-      setTotalTime((prev) => prev + 1);
-    }, 1000);
-  
-    return () => clearInterval(totalTimeTimer);
-  }, [quizOver]); // Runs only when quiz is active
-  
-  
 
   const handleNextQuestion = () => {
     if (currentQuestion < shuffledQuestions.length - 1) {
@@ -70,7 +66,7 @@ function App() {
     setScore(0);
     setTimeLeft(30);
     setQuizOver(false);
-    setTotalTime(0); // Reset total time
+    setTotalTime(0);
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   };
@@ -81,7 +77,16 @@ function App() {
   }
 
   if (quizOver) {
-    return <Result name={name} email={email} score={score} totalQuestions={shuffledQuestions.length} totalTime={totalTime} restartQuiz={restartQuiz} />;
+    return (
+      <Result
+        name={name}
+        email={email}
+        score={score}
+        totalQuestions={shuffledQuestions.length}
+        totalTime={totalTime}
+        restartQuiz={restartQuiz}
+      />
+    );
   }
 
   return (
@@ -89,13 +94,35 @@ function App() {
       <h1 className="text-3xl font-bold mb-4 text-center">Quiz App</h1>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
-          <p className="text-lg">Question {currentQuestion + 1} / {shuffledQuestions.length}</p>
+          <p className="text-lg">
+            Question {currentQuestion + 1} / {shuffledQuestions.length}
+          </p>
           <Timer timeLeft={timeLeft} />
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
-          <div className="bg-green-500 h-3 rounded-full" style={{ width: `${((currentQuestion + 1) / shuffledQuestions.length) * 100}%` }}></div>
+          <div
+            className="bg-green-500 h-3 rounded-full"
+            style={{
+              width: `${((currentQuestion + 1) / shuffledQuestions.length) * 100}%`,
+            }}
+          ></div>
         </div>
+        
+        {/* Display Question */}
         <p className="text-xl font-semibold mb-6">{shuffledQuestions[currentQuestion].question}</p>
+
+        {/* Show Code Block if the question contains code */}
+        {shuffledQuestions[currentQuestion].code && (
+          <pre className="bg-gray-800 text-white p-4 rounded-lg text-sm overflow-x-auto mb-6">
+            <code>
+              {Array.isArray(shuffledQuestions[currentQuestion].code)
+                ? shuffledQuestions[currentQuestion].code.join("\n")
+                : shuffledQuestions[currentQuestion].code}
+            </code>
+          </pre>
+        )}
+
+        {/* Answer Options */}
         <div className="space-y-4">
           {shuffledQuestions[currentQuestion].options.map((option, index) => (
             <button
